@@ -8,8 +8,8 @@ export default function Header({ cartCount, onOpenCart, callFrom }) {
         {/* Logo + Title */}
         <div className="flex items-center gap-3">
           <NavLink to="/">
-            <div className="w-15 h-10 bg-indigo-600 text-white flex items-center justify-center rounded">
-              H ⮕ S{" "}
+            <div className="sm:hidden w-15 h-10 bg-indigo-600 text-white flex items-center justify-center rounded">
+              PD{" "}
             </div>
             <div className="hidden sm:block">
               <div className="text-lg font-bold">Product Dashboard</div>
