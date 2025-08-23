@@ -34,7 +34,7 @@ const OrderPage = () => {
         {orders.map((order) => (
           <div
             key={order.id}
-            className="bg-white shadow rounded-xl p-5 space-y-4"
+            className="bg-white shadow rounded-xl p-5 space-y-4 mt-2"
           >
             {/* Order Header */}
             <div className="flex items-center justify-between border-b pb-3">

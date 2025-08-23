@@ -3,19 +3,21 @@ import { NavLink } from "react-router-dom";
 
 export default function Header({ cartCount, onOpenCart, callFrom }) {
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white shadow-sm sticky top-0 ">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
         {/* Logo + Title */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 text-white flex items-center justify-center rounded">
-            PM
-          </div>
-          <div className="hidden sm:block">
-            <div className="text-lg font-bold">Product Dashboard</div>
-            <div className="text-sm text-gray-500">
-              Manage products & orders
+          <NavLink to="/">
+            <div className="w-15 h-10 bg-indigo-600 text-white flex items-center justify-center rounded">
+              H ⮕ S{" "}
             </div>
-          </div>
+            <div className="hidden sm:block">
+              <div className="text-lg font-bold">Product Dashboard</div>
+              <div className="text-sm text-gray-500">
+                Manage products & orders
+              </div>
+            </div>
+          </NavLink>
         </div>
 
         {/* Navigation */}
