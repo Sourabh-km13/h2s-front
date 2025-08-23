@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
-export default function Toast({ message, show, onClose }) {
+export default function Toast({ message, show, onClose, type = "success" }) {
   useEffect(() => {
     if (show) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 2000); // auto-hide after 2s
-      return () => clearTimeout(timer);
+      const t = setTimeout(() => onClose(), 2200);
+      return () => clearTimeout(t);
     }
   }, [show, onClose]);
 
   if (!show) return null;
 
+  const bg = type === "error" ? "bg-red-600" : type === "info" ? "bg-blue-600" : "bg-green-600";
+
   return (
-    <div className="fixed  top-1/2 left-1/2      bg-green-600 text-white px-4 py-2 rounded shadow-lg transition-all">
+    <div className={`fixed top-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded shadow-lg text-white ${bg} z-50`}>
       {message}
     </div>
   );
