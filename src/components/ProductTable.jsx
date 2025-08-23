@@ -49,9 +49,9 @@ export default function ProductTable({ products, addToCart, onView, onEdit, onDe
     });
   }, [filteredProducts, sortConfig]);
 
-  // Pagination & lazy load (page increments)
-  const paginatedProducts = sortedProducts.slice(0, page * itemsPerPage);
+  // Pagination
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const paginatedProducts = sortedProducts.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   const handleSort = (key) => {
     setSortConfig(prev => ({
@@ -88,8 +88,8 @@ export default function ProductTable({ products, addToCart, onView, onEdit, onDe
         </select>
 
         <div className="ml-auto flex items-center gap-2 text-sm text-gray-600">
-          <div className="px-2 py-1 bg-gray-100 rounded">Showing {Math.min(paginatedProducts.length, sortedProducts.length)} of {sortedProducts.length}</div>
-          <div className="px-2 py-1 bg-gray-100 rounded">Page {Math.min(page, totalPages || 1)} / {totalPages || 1}</div>
+          <div className="px-2 py-1 bg-gray-100 rounded">Showing {(page - 1) * itemsPerPage + 1} - {Math.min(page * itemsPerPage, sortedProducts.length)} of {sortedProducts.length}</div>
+          <div className="px-2 py-1 bg-gray-100 rounded">Page {page} / {totalPages || 1}</div>
         </div>
       </div>
 
@@ -160,18 +160,26 @@ export default function ProductTable({ products, addToCart, onView, onEdit, onDe
         </table>
       </div>
 
-      {/* Pagination / Lazy load */}
+      {/* Pagination */}
       <div className="flex items-center justify-between mt-4">
+        {/* Prev / Next */}
         <div className="flex gap-2">
           <button onClick={() => setPage((s) => Math.max(1, s - 1))} disabled={page === 1} className="px-3 py-1 border rounded disabled:opacity-50">Prev</button>
-          <button onClick={() => setPage((s) => Math.min(totalPages, s + 1))} disabled={page === totalPages || totalPages === 0} className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`px-3 py-1 border rounded ${page === i + 1 ? "bg-blue-600 text-white" : ""}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button onClick={() => setPage((s) => Math.min(totalPages, s + 1))} disabled={page === totalPages} className="px-3 py-1 border rounded disabled:opacity-50">Next</button>
         </div>
 
-        {paginatedProducts.length < sortedProducts.length ? (
-          <div className="flex gap-2">
-            <div className="text-sm text-gray-600">Showing {paginatedProducts.length} of {sortedProducts.length}</div>
-            <button onClick={() => setPage((p) => p + 1)} className="px-4 py-2 bg-blue-600 text-white rounded">Load More</button>
-          </div>
+        {/* Load more */}
+        {page < totalPages ? (
+          <button onClick={() => setPage((p) => p + 1)} className="px-4 py-2 bg-indigo-600 text-white rounded">Load More</button>
         ) : (
           <div className="text-sm text-gray-500">All items loaded</div>
         )}
