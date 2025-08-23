@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import ProductList from "./components/ProductList";
 import CartSidebar from "./components/CartSidebar";
 import Toast from "./components/Toast";
+import ProductTable from "./components/ ProductTable";
 
 const SAMPLE_PRODUCTS = [
   {
@@ -59,7 +60,7 @@ export default function App() {
       const nextQty = existing ? existing.qty + qty : qty;
       return { ...prev, [product.id]: { product, qty: nextQty } };
     });
-    showToast("Added to Cart")
+    showToast("Added to Cart");
     // setCartOpen(true);
   }, []);
 
@@ -116,6 +117,7 @@ export default function App() {
         show={toast.show}
         onClose={() => setToast({ ...toast, show: false })}
       />
+      <ProductTable />
     </div>
   );
 }
