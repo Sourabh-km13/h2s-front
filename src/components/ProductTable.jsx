@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import ProductFilter from "./ProductFilter";
 
 export default function ProductTable({
   products,
@@ -9,7 +10,7 @@ export default function ProductTable({
 }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [priceRange, setPriceRange] = useState(""); 
+  const [priceRange, setPriceRange] = useState("");
   const [stockFilter, setStockFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -26,6 +27,28 @@ export default function ProductTable({
     { key: "status", label: "Status", sortable: false },
     { key: "actions", label: "Actions", sortable: false },
   ]);
+  const handleSearchChange = (v) => {
+    setSearch(v);
+    setPage(1);
+  };
+
+  const handleCategoryChange = (v) => {
+    setCategory(v);
+    setPage(1);
+  };
+
+  const handlePriceRangeChange = (v) => {
+    setPriceRange(v);
+    setPage(1);
+  };
+
+  const handleStockFilterChange = (v) => {
+    setStockFilter(v);
+  };
+
+  const handleStatusFilterChange = (v) => {
+    setStatusFilter(v);
+  };
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(products.map((p) => p.category)))],
@@ -99,65 +122,32 @@ export default function ProductTable({
     setColumns(next);
   };
 
+  const handleClearFilters = () => {
+    console.log("handleClearFilters");
+    setSearch("");
+    setCategory("All");
+    setPriceRange("");
+    setStatusFilter("All");
+    setStockFilter("All");
+    setPage(1);
+  };
+
   return (
     <div>
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4 flex-wrap">
-        <input
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          placeholder="🔍 Search by name..."
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-[2]"
-        />
-        <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
-          value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-            setPage(1);
-          }}
-        >
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="text"
-          placeholder="greater than price"
-          value={priceRange}
-          onChange={(e) => {
-            setPriceRange(e.target.value);
-            setPage(1);
-          }}
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
-        />
-
-        <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
-          value={stockFilter}
-          onChange={(e) => setStockFilter(e.target.value)}
-        >
-          <option value="All">All Stock</option>
-          <option value="In Stock">In Stock</option>
-          <option value="Out of Stock">Out of Stock</option>
-        </select>
-        <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-      </div>
-
+      <ProductFilter
+        search={search}
+        setSearch={handleSearchChange}
+        category={category}
+        setCategory={handleCategoryChange}
+        categories={categories}
+        priceRange={priceRange}
+        setPriceRange={handlePriceRangeChange}
+        stockFilter={stockFilter}
+        setStockFilter={handleStockFilterChange}
+        statusFilter={statusFilter}
+        setStatusFilter={handleStatusFilterChange}
+        onClear={handleClearFilters}
+      />
       {/* Info */}
       <div className="flex flex-col sm:flex-row gap-2 text-xs sm:text-sm text-gray-600 mb-3">
         <div className="px-2 py-1 bg-gray-100 rounded-lg">

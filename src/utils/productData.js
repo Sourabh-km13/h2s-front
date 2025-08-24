@@ -12,7 +12,7 @@ export const SAMPLE_PRODUCTS = [
   {
     id: "p2",
     name: "Ultra Laptop",
-    category: "Clothing",
+    category: "Electronics",
     price: 120,
     stock: 50,
     status: "Inactive",
