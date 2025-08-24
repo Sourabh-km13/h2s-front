@@ -3,13 +3,13 @@ import { useState, useMemo, useCallback } from "react";
 export default function useCart() {
   const [cartMap, setCartMap] = useState({});
 
-  // 🟢 Total item count
+  // Total item count
   const cartCount = useMemo(
     () => Object.values(cartMap).reduce((sum, it) => sum + it.qty, 0),
     [cartMap]
   );
 
-  // 🟢 Total price
+  //  Total price
   const cartTotal = useMemo(
     () =>
       Object.values(cartMap).reduce(
@@ -19,7 +19,7 @@ export default function useCart() {
     [cartMap]
   );
 
-  // 🟢 Add product
+  //  Add product
   const addToCart = useCallback((product, qty = 1) => {
     setCartMap((prev) => {
       const existing = prev[product.id];
@@ -31,7 +31,7 @@ export default function useCart() {
     });
   }, []);
 
-  // 🟢 Update quantity
+  //  Update quantity
   const updateQty = useCallback((productId, qty) => {
     setCartMap((prev) => {
       if (!prev[productId]) return prev;
@@ -44,7 +44,7 @@ export default function useCart() {
     });
   }, []);
 
-  // 🟢 Remove item
+  //  Remove item
   const removeFromCart = useCallback((productId) => {
     setCartMap((prev) => {
       const copy = { ...prev };
@@ -53,7 +53,7 @@ export default function useCart() {
     });
   }, []);
 
-  // 🟢 Clear cart
+  //  Clear cart
   const clearCart = useCallback(() => {
     setCartMap({});
   }, []);

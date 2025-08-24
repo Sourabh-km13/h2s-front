@@ -176,7 +176,7 @@ export default function ProductTable({
       {/* Table */}
       <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
         <table className="w-full text-sm text-left border-collapse">
-          <thead className="bg-indigo-50 text-gray-700 uppercase sticky top-0 z-10">
+          <thead className="bg-indigo-50 text-gray-700 uppercase mt-2">
             <tr>
               {columns.map((col, i) => (
                 <th
@@ -206,7 +206,7 @@ export default function ProductTable({
               <tr key={p.id} className={`transition ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-indigo-50`}>
                 {columns.map((col) => {
                   if (col.key === "image") {
-                    return <td key={col.key} className="px-4 py-3"><img src={p.img} alt={p.name} className="w-12 h-10 sm:w-14 object-cover rounded-md border" /></td>;
+                    return <td key={col.key} className="px-4 py-3"><img loading="lazy" src={p.img} alt={p.name} className="w-12 h-10 sm:w-14 object-cover rounded-md border" /></td>;
                   }
                   if (col.key === "actions") {
                     return (
@@ -235,19 +235,15 @@ export default function ProductTable({
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col sm:flex-row gap-3 mt-4 items-center justify-center">
+        <div className="flex flex-wrap gap-2 ">
           <button onClick={() => setPage((s) => Math.max(1, s - 1))} disabled={page === 1} className="px-3 py-1 border rounded-lg disabled:opacity-50 hover:bg-gray-100">Prev</button>
           {[...Array(totalPages)].map((_, i) => (
             <button key={i} onClick={() => setPage(i + 1)} className={`px-3 py-1 border rounded-lg ${page === i + 1 ? "bg-indigo-600 text-white" : "hover:bg-gray-100"}`}>{i + 1}</button>
           ))}
           <button onClick={() => setPage((s) => Math.min(totalPages, s + 1))} disabled={page === totalPages} className="px-3 py-1 border rounded-lg disabled:opacity-50 hover:bg-gray-100">Next</button>
         </div>
-        {page < totalPages ? (
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Load More</button>
-        ) : (
-          <div className="text-sm text-gray-500">All items loaded</div>
-        )}
+        
       </div>
     </div>
   );
