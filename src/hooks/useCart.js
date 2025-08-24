@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 
-export default function useCart() {
+export default function useCart( showToast ) {
   const [cartMap, setCartMap] = useState({});
 
   // Total item count
@@ -29,6 +29,7 @@ export default function useCart() {
         [product.id]: { product, qty: nextQty },
       };
     });
+    showToast("Item added to Cart");
   }, []);
 
   //  Update quantity

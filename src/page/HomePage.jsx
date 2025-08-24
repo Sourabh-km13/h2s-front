@@ -25,6 +25,10 @@ function HomePage() {
     type: "success",
   });
 
+  const showToast = useCallback((message, type = "success") => {
+    setToast({ show: true, message, type });
+  }, []);
+
   const {
     cartMap,
     cartCount,
@@ -33,11 +37,7 @@ function HomePage() {
     updateQty,
     removeFromCart,
     clearCart,
-  } = useCart();
-
-  const showToast = useCallback((message, type = "success") => {
-    setToast({ show: true, message, type });
-  }, []);
+  } = useCart(showToast);
 
   // Product actions (open modals)
   const handleView = (product) => {
@@ -68,11 +68,15 @@ function HomePage() {
     showToast("🗑️ Product deleted", "success");
   };
 
+  const productsWithCartStock = products.map((p) => {
+    const inCartQty = cartMap[p.id]?.qty || 0;
+    return { ...p, stock: p.stock - inCartQty };
+  });
   return (
     <div className="min-h-screen bg-gray-50">
       <Header cartCount={cartCount} onOpenCart={() => setCartOpen(true)} />
 
-      <StatsCards />
+      <StatsCards products={products} cartMap={cartMap} />
 
       <main className="max-w-7xl mx-auto p-6">
         <h1 className="text-3xl font-semibold mb-6">
@@ -80,7 +84,8 @@ function HomePage() {
         </h1>
 
         <ProductTable
-          products={products}
+          // products={products}
+          products={productsWithCartStock}
           addToCart={addToCart}
           onView={handleView}
           onEdit={handleEdit}
