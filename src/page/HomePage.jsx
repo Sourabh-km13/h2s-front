@@ -84,7 +84,6 @@ function HomePage() {
         </h1>
 
         <ProductTable
-          // products={products}
           products={productsWithCartStock}
           addToCart={addToCart}
           onView={handleView}

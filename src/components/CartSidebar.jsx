@@ -1,54 +1,61 @@
 import React, { useMemo } from "react";
- 
+
 function CartItemRow({ item, onInc, onDec, onRemove }) {
   return (
-    <div className="flex items-center gap-4 py-3 border-b last:border-none">
-      {/* Thumbnail */}
-      <img
-        src={item.product.img}
-        alt={item.product.name}
-        className="w-16 h-12 object-cover rounded-lg shadow-sm"
-      />
+    <div className="bg-white rounded-xl shadow-md p-4 mb-3 hover:shadow-lg transition">
+  <div className="flex items-center gap-4">
+    {/* Thumbnail */}
+    <img
+      src={item.product.img}
+      alt={item.product.name}
+      className="w-20 h-16 object-cover rounded-lg border border-gray-200"
+    />
 
-      {/* Details */}
-      <div className="flex-1">
-        <div className="font-medium text-gray-800">{item.product.name}</div>
-        <div className="text-sm text-gray-500">
-          ₹{item.product.price.toFixed(2)}
-        </div>
+    {/* Product Details */}
+    <div className="flex-1">
+      <div className="font-semibold text-gray-800 text-base">
+        {item.product.name}
       </div>
-
-      {/* Qty Controls */}
-      <div className="flex items-center gap-2">
-        <button
-          onClick={onDec}
-          className="px-2 py-1 border rounded hover:bg-gray-100 transition"
-        >
-          -
-        </button>
-        <div className="w-8 text-center font-medium">{item.qty}</div>
-        <button
-          onClick={onInc}
-          className="px-2 py-1 border rounded hover:bg-gray-100 transition"
-        >
-          +
-        </button>
+      <div className="text-sm text-gray-500">
+        ₹{item.product.price.toFixed(2)}
       </div>
+    </div>
 
-      {/* Price */}
-      <div className="w-20 text-right font-semibold text-gray-700">
-        ₹{(item.product.price * item.qty).toFixed(2)}
-      </div>
+    {/* Remove Button */}
+    <button
+      onClick={onRemove}
+      className="text-red-500 hover:bg-red-100 p-2 rounded-full transition"
+    >
+      ❌
+    </button>
+  </div>
 
-      {/* Remove */}
+  {/* Qty Controls + Price */}
+  <div className="flex justify-between items-center mt-4">
+    {/* Quantity Controls */}
+    <div className="flex items-center gap-2">
       <button
-        onClick={onRemove}
-        className="ml-2 text-red-500 hover:text-red-700 transition"
+        onClick={onDec}
+        className="px-3 py-1 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100 font-bold transition"
       >
-        ❌
-        {/* <Trash2 size={18} /> */}
+        -
+      </button>
+      <div className="w-10 text-center font-medium">{item.qty}</div>
+      <button
+        onClick={onInc}
+        className="px-3 py-1 rounded-lg border border-gray-300 bg-gray-50 hover:bg-gray-100 font-bold transition"
+      >
+        +
       </button>
     </div>
+
+    {/* Total Price */}
+    <div className="text-lg font-semibold text-gray-700">
+      ₹{(item.product.price * item.qty).toFixed(2)}
+    </div>
+  </div>
+</div>
+
   );
 }
 
@@ -92,7 +99,7 @@ export default function CartSidebar({
                 onClick={clearCart}
                 className="text-sm text-gray-500 hover:text-red-600 transition"
               >
-                Clear
+                Clear Cart
               </button>
             )}
             <button
@@ -105,7 +112,7 @@ export default function CartSidebar({
         </div>
 
         {/* Items */}
-        <div className="p-4   overflow-y-auto h-[calc(100%-160px)]">
+        <div className="p-4   overflow-y-auto h-[calc(100%-160px)] overflow-x-hidden">
           {items.length === 0 ? (
             <div className="text-center text-gray-500 py-16">
               Your cart is empty 🛍️

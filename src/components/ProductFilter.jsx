@@ -22,12 +22,12 @@ export default function ProductFilters({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="🔍 Search by name..."
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-[2]"
+          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-[2] w-full"
         />
 
         {/* Category */}
         <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
+          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1 w-full"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -44,12 +44,12 @@ export default function ProductFilters({
           placeholder="Price Range (e.g. 100-500)"
           value={priceRange}
           onChange={(e) => setPriceRange(e.target.value)}
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
+          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1  w-full"
         />
 
         {/* Stock */}
         <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
+          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1 w-full"
           value={stockFilter}
           onChange={(e) => setStockFilter(e.target.value)}
         >
@@ -60,7 +60,7 @@ export default function ProductFilters({
 
         {/* Status */}
         <select
-          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1"
+          className="border px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 flex-1 w-full"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
