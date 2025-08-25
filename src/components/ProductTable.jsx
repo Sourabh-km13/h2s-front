@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from "react";
 import ProductFilter from "./ProductFilter";
+import { usePaginationCache } from "../hooks/usePaginationWithCache";
+import Pagination from "./Pagination";
 
 export default function ProductTable({
   products,
@@ -14,8 +16,6 @@ export default function ProductTable({
   const [stockFilter, setStockFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
 
   const [columns, setColumns] = useState([
     { key: "id", label: "ID", sortable: true },
@@ -94,12 +94,15 @@ export default function ProductTable({
       return sortConfig.direction === "asc" ? A - B : B - A;
     });
   }, [filteredProducts, sortConfig]);
-
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
-  const paginatedProducts = sortedProducts.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  const itemsPerPage = 10;
+  const {
+    page,
+    totalPages,
+    data: paginatedProducts,
+    setPage,
+    next,
+    prev,
+  } = usePaginationCache(sortedProducts, itemsPerPage);
 
   const handleSort = (key) => {
     setSortConfig((prev) => ({
@@ -303,37 +306,14 @@ export default function ProductTable({
         )}
       </div>
 
-      {/* Pagination */}
       {paginatedProducts.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-2 mt-4">
-          <button
-            onClick={() => setPage((s) => Math.max(1, s - 1))}
-            disabled={page === 1}
-            className="px-3 py-1 border rounded-lg disabled:opacity-50 hover:bg-gray-100"
-          >
-            Prev
-          </button>
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setPage(i + 1)}
-              className={`px-3 py-1 border rounded-lg ${
-                page === i + 1
-                  ? "bg-indigo-600 text-white"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              {i + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => setPage((s) => Math.min(totalPages, s + 1))}
-            disabled={page === totalPages}
-            className="px-3 py-1 border rounded-lg disabled:opacity-50 hover:bg-gray-100"
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+          prev={prev}
+          next={next}
+        />
       )}
     </div>
   );

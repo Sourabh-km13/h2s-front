@@ -36,7 +36,7 @@ export default function Header({ cartCount, onOpenCart, callFrom }) {
             Home
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="/orders"
             className={({ isActive }) =>
               `px-3 py-2 rounded transition-colors ${
@@ -47,7 +47,7 @@ export default function Header({ cartCount, onOpenCart, callFrom }) {
             }
           >
             Orders
-          </NavLink>
+          </NavLink> */}
 
           {/* Cart */}
           {callFrom !== "ORDER_PAGE" && (
