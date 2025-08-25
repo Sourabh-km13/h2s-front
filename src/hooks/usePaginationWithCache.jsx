@@ -1,28 +1,45 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 
 export function usePaginationCache(data, itemsPerPage = 10) {
   const [page, setPage] = useState(1);
   const cache = useRef(new Map());
+  const dataRef = useRef(data);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  useEffect(() => {
+    // Reset to page 1 when filtered data changes
+    setPage(1);
+    cache.current.clear();
+    dataRef.current = data;
+  }, [data]); // This will trigger when filtered data changes
+
+  const totalPages = Math.max(1, Math.ceil(data.length / itemsPerPage));
 
   const paginated = useMemo(() => {
-    if (cache.current.has(page)) {
-      return cache.current.get(page);
+    // Ensure page is within valid range
+    const currentPage = Math.min(Math.max(1, page), totalPages);
+
+    if (cache.current.has(currentPage)) {
+      return cache.current.get(currentPage);
     }
-    const start = (page - 1) * itemsPerPage;
+
+    const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const slice = data.slice(start, end);
-    cache.current.set(page, slice);
+
+    cache.current.set(currentPage, slice);
     return slice;
-  }, [data, page, itemsPerPage]);
+  }, [data, page, itemsPerPage, totalPages]);
+
+  const setPageSafe = (newPage) => {
+    setPage(Math.max(1, Math.min(newPage, totalPages)));
+  };
 
   return {
-    page,
+    page: Math.min(page, totalPages),
     totalPages,
     data: paginated,
-    setPage,
-    next: () => setPage((p) => Math.min(p + 1, totalPages)),
-    prev: () => setPage((p) => Math.max(p - 1, 1)),
+    setPage: setPageSafe,
+    next: () => setPageSafe(page + 1),
+    prev: () => setPageSafe(page - 1),
   };
 }

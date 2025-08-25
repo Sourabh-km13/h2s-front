@@ -44,10 +44,12 @@ export default function ProductTable({
 
   const handleStockFilterChange = (v) => {
     setStockFilter(v);
+    setPage(1); 
   };
 
   const handleStatusFilterChange = (v) => {
     setStatusFilter(v);
+    setPage(1); 
   };
 
   const categories = useMemo(
