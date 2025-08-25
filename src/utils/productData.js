@@ -28,13 +28,15 @@ export const SAMPLE_PRODUCTS = Array.from({ length: 1000 }, (_, i) => {
   const productName = names[category][i % names[category].length];
   const prefix = ["Premium", "Ultra", "Eco", "Classic", "Pro", "Smart"];
   const name = `${prefix[i % prefix.length]} ${productName}`;
+  const stock = Math.random() < 0.1 ? 0 : Math.floor(Math.random() * 100) + 1;
 
   return {
     id,
     name,
     category,
     price: Math.floor(Math.random() * 900) + 100, // price between 100–1000
-    stock: Math.floor(Math.random() * 100) + 1, // stock between 1–100
+    // stock: Math.floor(Math.random() * 100) + 1, // stock between 1–100
+    stock,
     status: i % 2 === 0 ? "Active" : "Inactive",
     desc: `${name} with high quality and great features`,
     img: `https://picsum.photos/seed/${id}/200/140`,

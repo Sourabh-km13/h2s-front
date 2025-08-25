@@ -10,3 +10,4 @@
 - **Mobile responsive ui**
 - **Add to cart hook base**
 - **Pagination feature**
+- **Debounce feature on search**
