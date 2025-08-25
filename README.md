@@ -8,4 +8,5 @@
 - **Filter Add Sorting feature**
 
 - **Mobile responsive ui**
--  **Add to cart  hook base**
+- **Add to cart hook base**
+- **Pagination feature**

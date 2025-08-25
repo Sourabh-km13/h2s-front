@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import ProductFilter from "./ProductFilter";
 import { usePaginationCache } from "../hooks/usePaginationWithCache";
 import Pagination from "./Pagination";
+import useDebounce from "../hooks/useDebounce";
 
 export default function ProductTable({
   products,
@@ -61,6 +62,7 @@ export default function ProductTable({
     const [min, max] = range.split("-").map((v) => Number(v.trim()));
     return { min: isNaN(min) ? 0 : min, max: isNaN(max) ? Infinity : max };
   };
+  const debouncedSearch = useDebounce(search, 400);
 
   const filteredProducts = useMemo(() => {
     const { min, max } = parsePriceRange(priceRange);
@@ -81,7 +83,7 @@ export default function ProductTable({
         matchesStatus
       );
     });
-  }, [products, search, category, priceRange, stockFilter, statusFilter]);
+  }, [products, debouncedSearch, category, priceRange, stockFilter, statusFilter]);
 
   const sortedProducts = useMemo(() => {
     if (!sortConfig.key) return filteredProducts;
@@ -136,6 +138,7 @@ export default function ProductTable({
     setStockFilter("All");
     setPage(1);
   };
+
 
   return (
     <div>
