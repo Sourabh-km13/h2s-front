@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useMemo, useEffect } from "react";
 import ProductFilter from "./ProductFilter";
 import { usePaginationCache } from "../hooks/usePaginationWithCache";
 import Pagination from "./Pagination";
 import useDebounce from "../hooks/useDebounce";
+
 
 export default function ProductTable({
   products,
@@ -11,23 +13,39 @@ export default function ProductTable({
   onEdit,
   onDeleteRequest,
 }) {
+  const [data , setData] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [priceRange, setPriceRange] = useState("");
   const [stockFilter, setStockFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
-
+  const [loading, setloading] = useState(false);
   const [columns, setColumns] = useState([
     { key: "id", label: "ID", sortable: true },
-    { key: "image", label: "Image", sortable: false },
     { key: "name", label: "Name", sortable: true },
-    { key: "category", label: "Category", sortable: false },
-    { key: "price", label: "Price", sortable: true },
-    { key: "stock", label: "Stock", sortable: true },
-    { key: "status", label: "Status", sortable: false },
-    { key: "actions", label: "Actions", sortable: false },
+    { key: "username", label: "Username", sortable: false },
+    { key: "address", label: "Address", sortable: false },
+    { key: "phone", label: "Phone", sortable: true },
+    { key: "website", label: "Website", sortable: true },
+    { key:"company", label:"Company", sortable:true},
   ]);
+  useEffect(() => {
+    async function fetchData (){
+      const data = await fetch('https://jsonplaceholder.typicode.com/users')
+      const response = await data.json();
+      setData(response);
+      console.log(typeof(response),response);
+    }
+    try {
+      setloading(true);
+      fetchData();
+      setloading(false)
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }, [])
   const handleSearchChange = (v) => {
     setSearch(v);
     setPage(1);
@@ -140,9 +158,9 @@ export default function ProductTable({
   };
 
 
-  return (
+return (
     <div>
-      <ProductFilter
+      {/* <ProductFilter
         search={search}
         setSearch={handleSearchChange}
         category={category}
@@ -155,9 +173,9 @@ export default function ProductTable({
         statusFilter={statusFilter}
         setStatusFilter={handleStatusFilterChange}
         onClear={handleClearFilters}
-      />
+      /> */}
       {/* Info */}
-      <div className="flex flex-col sm:flex-row gap-2 text-xs sm:text-sm text-gray-600 mb-3">
+      {/* <div className="flex flex-col sm:flex-row gap-2 text-xs sm:text-sm text-gray-600 mb-3">
         <div className="px-2 py-1 bg-gray-100 rounded-lg">
           Showing {(page - 1) * itemsPerPage + 1} -{" "}
           {Math.min(page * itemsPerPage, sortedProducts.length)} of{" "}
@@ -166,13 +184,13 @@ export default function ProductTable({
         <div className="px-2 py-1 bg-gray-100 rounded-lg">
           Page {page} / {totalPages || 1}
         </div>
-      </div>
+      </div> */}
 
       {/* Table */}
       <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
-        {paginatedProducts.length === 0 ? (
+        {loading? (
           <div className="text-center py-10 text-gray-500">
-            No products found.
+            loading
           </div>
         ) : (
           <table className="w-full text-sm text-left border-collapse">
@@ -209,7 +227,7 @@ export default function ProductTable({
               </tr>
             </thead>
             <tbody>
-              {paginatedProducts.map((p, idx) => (
+              {data.map((p, idx) => (
                 <tr
                   key={p.id}
                   className={`transition ${
@@ -217,78 +235,80 @@ export default function ProductTable({
                   } hover:bg-indigo-50`}
                 >
                   {columns.map((col) => {
-                    if (col.key === "image")
-                      return (
-                        <td key={col.key} className="px-4 py-3">
-                          <img
-                            src={p.img}
-                            alt={p.name}
-                            className="w-12 h-10 sm:w-14 object-cover rounded-md border"
-                          />
-                        </td>
-                      );
-                    if (col.key === "actions")
-                      return (
-                        <td
-                          key={col.key}
-                          className="px-4 py-4 flex flex-wrap gap-2"
-                        >
-                          <button
-                            onClick={() => onView(p)}
-                            className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded hover:bg-blue-100"
-                          >
-                            View
-                          </button>
-                          <button
-                            onClick={() => onEdit(p)}
-                            className="px-2 py-1 text-xs bg-green-50 text-green-600 rounded hover:bg-green-100"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => onDeleteRequest(p)}
-                            className="px-2 py-1 text-xs bg-red-50 text-red-600 rounded hover:bg-red-100"
-                          >
-                            Delete
-                          </button>
-                          <button
-                            onClick={() => p.stock > 0 && addToCart(p)}
-                            disabled={p.stock === 0}
-                            className={`px-2 py-1 text-xs rounded text-white ${
-                              p.stock === 0
-                                ? "bg-gray-400"
-                                : "bg-indigo-600 hover:bg-indigo-700"
-                            }`}
-                          >
-                            Add
-                          </button>
-                        </td>
-                      );
-                    if (col.key === "status")
+                    
+                    if(col.key==="id"){
                       return (
                         <td key={col.key} className="px-4 py-3">
                           <span
-                            className={`px-2 py-1 text-xs rounded-full font-medium ${
-                              p.status === "Active"
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
                           >
-                            {p.status}
+                            {p.id}
                           </span>
                         </td>
                       );
-                    if (col.key === "stock")
+                    }
+                    if(col.key==="company"){
                       return (
                         <td key={col.key} className="px-4 py-3">
                           <span
-                            className={`px-2 py-1 text-xs rounded-full font-medium ${
-                              p.stock > 0
-                                ? "bg-green-100 text-green-700"
-                                : "bg-red-100 text-red-700"
-                            }`}
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
                           >
-                            {p.stock > 0 ? "In Stock" : "Out of Stock"}
+                            {p.company.name}
+                          </span>
+                        </td>
+                      );
+                    }
+                    if(col.key==="username"){
+                      return (
+                        <td key={col.key} className="px-4 py-3">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
+                          >
+                            {p.username}
+                          </span>
+                        </td>
+                      );
+                    }
+                    if(col.key==="name"){
+                      return (
+                        <td key={col.key} className="px-4 py-3">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
+                          >
+                            {p.name}
+                          </span>
+                        </td>
+                      );
+                    }
+                    if(col.key==="website"){
+                      return (
+                        <td key={col.key} className="px-4 py-3">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
+                          >
+                            {p.website}
+                          </span>
+                        </td>
+                      );
+                    }
+                    
+                    if (col.key === "phone")
+                      return (
+                        <td key={col.key} className="px-4 py-3">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full font-medium `}
+                          >
+                            {p.phone}
+                          </span>
+                        </td>
+                      );
+                    if (col.key === "address")
+                      return (
+                        <td key={col.key} className="px-4 py-3">
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full font-medium`}
+                          >
+                            {`${p.address.city} ${p.address.street} ${p.address.suite} ${p.address.zipcode}`}
                           </span>
                         </td>
                       );
@@ -298,11 +318,7 @@ export default function ProductTable({
                           ₹{p.price}
                         </td>
                       );
-                    return (
-                      <td key={col.key} className="px-4 py-3">
-                        {p[col.key]}
-                      </td>
-                    );
+                    
                   })}
                 </tr>
               ))}
